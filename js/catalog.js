@@ -164,7 +164,7 @@ const CATALOG = [
 const OFFER_CATALOG = [
   {
     id: "offer-nike1",
-    name: "Nike",
+    name: "Nike Dunk Low Blue and White",
     price: 0,
     extra: 0,
     img: "./offer-products/nike1.jpg",
@@ -172,7 +172,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-adidas1",
-    name: "Adidas",
+    name: "Adidas Samba Brown",
     price: 0,
     extra: 0,
     img: "./offer-products/adidas1.jpg",
@@ -180,7 +180,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-puma1",
-    name: "Puma",
+    name: "Puma Speedcat Black and White",
     price: 0,
     extra: 100,
     img: "./offer-products/puma1.jpg",
@@ -188,7 +188,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-jordan1",
-    name: "Jordan",
+    name: "Jordan Mid Black",
     price: 0,
     extra: 300,
     img: "./offer-products/jordan1.jpg",
@@ -196,7 +196,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-nike2",
-    name: "Nike",
+    name: "Nike Jordan 1 Low",
     price: 0,
     extra: 50,
     img: "./offer-products/nike2.jpg",
@@ -204,7 +204,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-adidas2",
-    name: "Adidas",
+    name: "Adidas Campus Light Brown",
     price: 0,
     extra: 0,
     img: "./offer-products/adidas2.jpg",
@@ -212,7 +212,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-puma2",
-    name: "Puma",
+    name: "Puma Speedcat Red and White",
     price: 0,
     extra: 0,
     img: "./offer-products/puma2.jpg",
@@ -220,7 +220,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-jordan2",
-    name: "Jordan",
+    name: "Jordan Air 4 Black Cat",
     price: 0,
     extra: 0,
     img: "./offer-products/jordan2.jpg",
@@ -228,7 +228,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-nike3",
-    name: "Nike",
+    name: "Nike Custom Air Force",
     price: 0,
     extra: 0,
     img: "./offer-products/nike3.jpg",
@@ -236,7 +236,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-adidas3",
-    name: "Adidas",
+    name: "Adidas Campus Black and White",
     price: 0,
     extra: 100,
     img: "./offer-products/adidas3.jpg",
@@ -244,7 +244,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-puma3",
-    name: "Puma",
+    name: "Puma Speedcat Peach and White",
     price: 0,
     extra: 0,
     img: "./offer-products/puma3.jpg",
@@ -252,7 +252,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-nike4",
-    name: "Nike",
+    name: "Nike Air Jordan Retro Low",
     price: 0,
     extra: 0,
     img: "./offer-products/nike4.jpg",
@@ -260,7 +260,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-adidas4",
-    name: "Adidas",
+    name: "Adidas Forum Low White and Black",
     price: 0,
     extra: 100,
     img: "./offer-products/adidas4.jpg",
@@ -268,7 +268,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-nike5",
-    name: "Nike",
+    name: "Nike Dunk low Greyish",
     price: 0,
     extra: 0,
     img: "./offer-products/nike5.jpg",
@@ -276,7 +276,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-adidas5",
-    name: "Adidas",
+    name: "Adidas Samba Greyish Green",
     price: 0,
     extra: 0,
     img: "./offer-products/adidas5.jpg",
@@ -284,7 +284,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-nike6",
-    name: "Nike",
+    name: "Nike Dunk Low Full Black",
     price: 0,
     extra: 100,
     img: "./offer-products/nike6.jpg",
@@ -292,7 +292,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-adidas6",
-    name: "Adidas",
+    name: "Adidas Samba Olive Green Suede",
     price: 0,
     extra: 0,
     img: "./offer-products/adidas6.jpg",
@@ -300,7 +300,7 @@ const OFFER_CATALOG = [
   },
   {
     id: "offer-nike7",
-    name: "Nike",
+    name: "Nike Jordan Retro Low 1",
     price: 0,
     extra: 0,
     img: "./offer-products/nike7.jpg",
