@@ -1,5 +1,5 @@
 // ====== CONFIG ======
-const OFFER_ACTIVE = false;
+const OFFER_ACTIVE = true;
 
 const phone = "919497090854";
 
@@ -57,14 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   };
 
-  // =================================================================
-  // ## MODIFICATION 1 & 2: SECURE API CALL ##
-  // The API call now goes to a proxy endpoint on your own server.
-  // You MUST create a backend that receives requests at '/api/gemini',
-  // adds your secret API key, calls the real Google Gemini API,
-  // and then sends the response back to the frontend.
-  // =================================================================
-
   function showInfoModal(title, message) {
     const modalContainer = $("#modal-container");
     const modal = document.createElement("div");
@@ -85,6 +77,37 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeModal = () => (modalContainer.innerHTML = "");
     $("#close-info-modal").addEventListener("click", closeModal);
     modal.addEventListener("click", (e) => e.target === modal && closeModal());
+  }
+
+  function showIncompleteOfferModal(message) {
+    const modalContainer = $("#modal-container");
+    const modal = document.createElement("div");
+    modal.className =
+      "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50";
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-6 w-full max-w-sm text-center relative">
+            <button class="close-modal-btn absolute top-2 right-3 text-3xl text-slate-400 hover:text-slate-700">&times;</button>
+            <h3 class="font-bold text-lg">Selection Incomplete</h3>
+            <p class="mt-2 text-slate-600">${message}</p>
+            <div class="mt-6 flex justify-center">
+                <button id="go-to-offer" class="bg-blue-600 text-white px-4 py-2 rounded-md">Go to Offer Page</button>
+            </div>
+        </div>
+    `;
+    modalContainer.innerHTML = "";
+    modalContainer.appendChild(modal);
+
+    const closeModal = () => (modalContainer.innerHTML = "");
+
+    modal
+      .querySelector(".close-modal-btn")
+      .addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => e.target === modal && closeModal());
+
+    $("#go-to-offer").addEventListener("click", () => {
+      navigateTo("offer");
+      closeModal();
+    });
   }
 
   function showConfirmationModal(message, onConfirm) {
@@ -116,11 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // =================================================================
-  // ## MODIFICATION 3: NEW MODAL FOR REPLACING ITEMS ##
-  // This new modal function is called when the offer cart is full
-  // and the user tries to select a new item.
-  // =================================================================
   function showReplacementModal(newProduct, onConfirm) {
     const modalContainer = $("#modal-container");
     const modal = document.createElement("div");
@@ -164,11 +182,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const SHIPPING_FEE = 100;
 
   function saveState() {
-    localStorage.setItem("STYLYY_KICKS_STATE", JSON.stringify(state));
+    sessionStorage.setItem("STYLYY_KICKS_STATE", JSON.stringify(state));
   }
 
   function loadState() {
-    const savedState = localStorage.getItem("STYLYY_KICKS_STATE");
+    const savedState = sessionStorage.getItem("STYLYY_KICKS_STATE");
     if (savedState) {
       Object.assign(state, JSON.parse(savedState));
     }
@@ -199,44 +217,60 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function createProductCard(product, mode) {
-    const price =
-      mode === "offer"
-        ? OFFER_BASE_PRICE + (product.extra || 0)
-        : product.price;
     const card = document.createElement("div");
     card.className =
       "card bg-white rounded-lg shadow-md overflow-hidden transform hover:-translate-y-1 transition-all cursor-pointer";
     card.dataset.id = product.id;
+
+    let detailsHtml = "";
+
+    if (mode === "offer") {
+      detailsHtml = `
+            <div class="flex items-center justify-between mt-2">
+                <div class="flex flex-wrap gap-2">
+                    ${product.sizes
+                      .map(
+                        (s) =>
+                          `<span class="text-xs border rounded-md px-2 py-1">${s}</span>`
+                      )
+                      .join("")}
+                </div>
+                ${
+                  product.extra > 0
+                    ? `<span class="bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">+${formatINR(
+                        product.extra
+                      )}</span>`
+                    : ""
+                }
+            </div>
+        `;
+    } else {
+      detailsHtml = `
+            <div class="flex items-center justify-between mt-2">
+                <p class="font-semibold text-blue-600">${formatINR(
+                  product.price
+                )}</p>
+            </div>
+        `;
+    }
+
     card.innerHTML = `
-                <div class="h-48 bg-gray-200">
-                    <img src="${product.img}" alt="${
-      product.name
-    }" class="w-full h-full object-cover">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-slate-800">${product.name}</h3>
-                    <div class="flex items-center justify-between mt-2">
-                        <p class="font-semibold text-blue-600">${formatINR(
-                          price
-                        )}</p>
-                        ${
-                          mode === "offer" && product.extra > 0
-                            ? `<span class="bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">+${formatINR(
-                                product.extra
-                              )}</span>`
-                            : ""
-                        }
-                    </div>
-                     <button data-id="${
-                       product.id
-                     }" class="view-details-btn text-sm text-slate-500 hover:text-blue-600 mt-2">View Details</button>
-                </div>
-            `;
-    card.addEventListener("click", () => handleProductSelection(product, mode));
-    card.querySelector(".view-details-btn").addEventListener("click", (e) => {
+        <div class="h-48 bg-gray-200">
+            <img src="${product.img}" alt="${product.name}" class="w-full h-full object-cover">
+        </div>
+        <div class="p-4">
+            <h3 class="font-bold text-slate-800">${product.name}</h3>
+            ${detailsHtml}
+            <button data-id="${product.id}" class="select-btn mt-2 w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-all">Select</button>
+        </div>
+    `;
+
+    card.addEventListener("click", () => showProductModal(product, mode));
+    card.querySelector(".select-btn").addEventListener("click", (e) => {
       e.stopPropagation();
-      showProductModal(product, mode); // Pass the mode here
+      handleProductSelection(product, mode);
     });
+
     return card;
   }
 
@@ -246,8 +280,11 @@ document.addEventListener("DOMContentLoaded", () => {
     offerGrid.innerHTML = "";
     productsGrid.innerHTML = "";
 
-    CATALOG.forEach((p) => {
+    OFFER_CATALOG.forEach((p) => {
       offerGrid.appendChild(createProductCard(p, "offer"));
+    });
+
+    CATALOG.forEach((p) => {
       productsGrid.appendChild(createProductCard(p, "single"));
     });
   }
@@ -258,18 +295,22 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.className =
       "fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50";
     modal.innerHTML = `
-                <div class="bg-white rounded-xl shadow-2xl w-full max-w-md m-4 transform transition-all opacity-0 -translate-y-4 max-h-[90vh] overflow-y-auto">
-                    <div class="p-6">
-                        <div class="flex justify-between items-start">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl m-4 transform transition-all opacity-0 -translate-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-center">
+                        <img src="${product.img}" alt="${
+      product.name
+    }" class="w-full h-auto rounded-lg cursor-zoom-in modal-image"/>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
                              <h2 class="text-2xl font-bold text-slate-800">${
                                product.name
                              }</h2>
                              <button class="close-modal text-3xl text-slate-400 hover:text-slate-700">&times;</button>
                         </div>
-                        <img src="${product.img}" alt="${
-      product.name
-    }" class="w-full h-56 object-cover rounded-lg mt-4"/>
-                        <p class="mt-4 text-slate-600">Base Price: ${formatINR(
+                        <p class="text-slate-600">Base Price: ${formatINR(
                           product.price
                         )}</p>
                         ${
@@ -289,20 +330,13 @@ document.addEventListener("DOMContentLoaded", () => {
                                 .join("")}</div></div>`
                             : ""
                         }
-                        <div class="mt-6 space-y-2">
-                            <button class="gemini-btn w-full text-left p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors" data-gemini-action="describe">
-                                <span class="font-semibold">✨ Generate Description</span>
-                                <span class="text-sm text-slate-500 block">Get a catchy description for these kicks.</span>
-                            </button>
-                            <button class="gemini-btn w-full text-left p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors" data-gemini-action="style">
-                                <span class="font-semibold">✨ Style Assistant</span>
-                                <span class="text-sm text-slate-500 block">Get outfit ideas for these shoes.</span>
-                            </button>
-                        </div>
-                        <div id="gemini-response-container" class="mt-4 p-4 bg-gray-100 rounded-lg text-slate-700 min-h-[50px] whitespace-pre-wrap" style="display: none;"></div>
+                        <button class="modal-select-btn mt-6 w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all">Select</button>
                     </div>
                 </div>
-            `;
+            </div>
+        </div>
+    `;
+
     modalContainer.innerHTML = "";
     modalContainer.appendChild(modal);
 
@@ -327,56 +361,35 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.target === modal) closeModal();
     });
 
-    modal.querySelectorAll(".gemini-btn").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const action = btn.dataset.geminiAction;
-        const responseContainer = modal.querySelector(
-          "#gemini-response-container"
-        );
-        const allButtons = modal.querySelectorAll(".gemini-btn");
+    modal.querySelector(".modal-image").addEventListener("click", (e) => {
+      const imageUrl = e.target.src;
+      const overlay = document.createElement("div");
+      overlay.className = "image-overlay";
+      overlay.innerHTML = `<img src="${imageUrl}" alt="Full resolution product image">`;
+      document.body.appendChild(overlay);
 
-        responseContainer.style.display = "block";
-        responseContainer.innerHTML =
-          '<div class="animate-pulse p-2">Thinking...</div>';
-        allButtons.forEach((b) => (b.disabled = true));
-
-        let prompt = "";
-        if (action === "describe") {
-          prompt = `Write a short, trendy, and exciting product description for a shoe named "${product.name}". Make it sound cool and appealing for a young, fashion-conscious audience in India. Keep it under 50 words.`;
-        } else if (action === "style") {
-          prompt = `I just got a pair of ${product.name}. Suggest 3 different stylish outfits that would go well with these shoes, keeping in mind current fashion trends in India. Be specific about the items of clothing and suggest occasions for each outfit. Format the response with clear headings for each outfit.`;
-        }
-
-        if (prompt) {
-          // Assuming the backend returns plain text, which we then format
-          const responseText = await callGeminiAPI(prompt);
-          const formattedText = responseText
-            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-            .replace(/\*/g, "")
-            .replace(/\n/g, "<br>");
-          responseContainer.innerHTML = formattedText;
-        }
-
-        allButtons.forEach((b) => (b.disabled = false));
+      overlay.addEventListener("click", () => {
+        document.body.removeChild(overlay);
       });
+    });
+
+    modal.querySelector(".modal-select-btn").addEventListener("click", () => {
+      const replacementModalWasShown = handleProductSelection(product, mode);
+      if (!replacementModalWasShown) {
+        closeModal();
+      }
     });
   }
 
   function handleProductSelection(product, mode) {
+    let replacementModalShown = false;
     const performSelection = () => {
       state.cart.type = mode;
 
       if (mode === "offer") {
-        const isCartFull = state.cart.items.length >= 2;
-        const countInCart = state.cart.items.filter(
-          (item) => item.id === product.id
-        ).length;
-
-        // =================================================================
-        // ## MODIFICATION 3: OFFER SELECTION LOGIC ##
-        // Instead of always replacing item 2, we now show the replacement modal.
-        // =================================================================
-        if (isCartFull && countInCart === 0) {
+        if (state.cart.items.length < 2) {
+          state.cart.items.push({ ...product, selectedSize: null });
+        } else {
           showReplacementModal(product, (indexToReplace) => {
             state.cart.items[indexToReplace] = {
               ...product,
@@ -384,20 +397,8 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             updateUI();
           });
-          return; // Return here to prevent updateUI() from running twice
-        } else if (countInCart > 0) {
-          let lastIndex = -1;
-          for (let i = state.cart.items.length - 1; i >= 0; i--) {
-            if (state.cart.items[i].id === product.id) {
-              lastIndex = i;
-              break;
-            }
-          }
-          if (lastIndex !== -1) {
-            state.cart.items.splice(lastIndex, 1);
-          }
-        } else if (!isCartFull) {
-          state.cart.items.push({ ...product, selectedSize: null });
+          replacementModalShown = true;
+          return;
         }
       } else {
         // single mode
@@ -424,6 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       performSelection();
     }
+    return replacementModalShown;
   }
 
   function selectSizeForCartItem(itemIndex) {
@@ -477,16 +479,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateUI() {
-    // Update offer view
     const [offerItem1, offerItem2] =
       state.cart.type === "offer" ? state.cart.items : [null, null];
     $("#offer-sel1").textContent = offerItem1 ? offerItem1.name : "-";
     $("#offer-sel2").textContent = offerItem2 ? offerItem2.name : "-";
 
-    // Update product view
     const singleItem =
       state.cart.type === "single" ? state.cart.items[0] : null;
     $("#product-sel").textContent = singleItem ? singleItem.name : "-";
+
+    // Update offer total
+    if (state.cart.type === "offer" && state.cart.items.length > 0) {
+      const offerTotal = state.cart.items.reduce(
+        (acc, item) => acc + (item.extra || 0),
+        OFFER_BASE_PRICE
+      );
+      $("#offer-total").textContent = formatINR(offerTotal);
+    } else {
+      $("#offer-total").textContent = "-";
+    }
+
+    // Update product price
+    if (state.cart.type === "single" && singleItem) {
+      $("#product-price").textContent = formatINR(singleItem.price);
+    } else {
+      $("#product-price").textContent = "-";
+    }
 
     // Update selected cards
     $$(".card").forEach((c) => c.classList.remove("selected"));
@@ -494,10 +512,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const gridId =
         state.cart.type === "offer" ? "#offer-grid" : "#products-grid";
       const selectedIds = state.cart.items.map((item) => item.id);
+
+      const selectedCount = {};
+      selectedIds.forEach((id) => {
+        selectedCount[id] = (selectedCount[id] || 0) + 1;
+      });
+
       $$(`${gridId} .card`).forEach((card) => {
         const cardId = card.dataset.id;
-        if (selectedIds.includes(cardId)) {
+        if (selectedCount[cardId] > 0) {
           card.classList.add("selected");
+          selectedCount[cardId]--;
         }
       });
     }
@@ -609,19 +634,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (state.cart.type === "offer") {
       msg += `_Order Type: 2-Pair Offer_%0A`;
       state.cart.items.forEach((item, i) => {
-        const imageUrl = WEBSITE_BASE_URL + item.img.replace("./", ""); // <-- NEW LINE
+        const imageUrl = WEBSITE_BASE_URL + item.img.replace("./", "");
         msg += `%0A*Pair ${i + 1}:*%0A`;
         msg += `Name: ${item.name}%0A`;
         msg += `Size: ${item.selectedSize || "N/A"}%0A`;
-        msg += `Image: ${imageUrl}%0A`; // <-- NEW LINE
+        msg += `Image: ${imageUrl}%0A`;
       });
     } else {
       msg += `_Order Type: Single Pair_%0A`;
       const item = state.cart.items[0];
-      const imageUrl = WEBSITE_BASE_URL + item.img.replace("./", ""); // <-- NEW LINE
+      const imageUrl = WEBSITE_BASE_URL + item.img.replace("./", "");
       msg += `Name: ${item.name}%0A`;
       msg += `Size: ${item.selectedSize || "N/A"}%0A`;
-      msg += `Image: ${imageUrl}%0A`; // <-- NEW LINE
+      msg += `Image: ${imageUrl}%0A`;
     }
 
     let baseTotal = 0;
@@ -648,6 +673,23 @@ document.addEventListener("DOMContentLoaded", () => {
     el.addEventListener("click", (e) => {
       e.preventDefault();
       const page = e.currentTarget.dataset.page || "home";
+
+      if (page === "checkout") {
+        if (state.cart.type === "offer" && state.cart.items.length !== 2) {
+          showIncompleteOfferModal(
+            "You have an incomplete offer in your cart. Please select a second pair to continue."
+          );
+          return;
+        }
+        if (state.cart.type === "single" && state.cart.items.length !== 1) {
+          showInfoModal(
+            "Selection Incomplete",
+            "Please select one pair before checking out."
+          );
+          return;
+        }
+      }
+
       navigateTo(page);
     });
   });
@@ -663,10 +705,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (state.cart.type === "offer" && state.cart.items.length === 2) {
       navigateTo("checkout");
     } else {
-      showInfoModal(
-        "Selection Incomplete",
-        "Please select two pairs for the offer."
-      );
+      showIncompleteOfferModal("Please select two pairs for the offer.");
     }
   });
 
@@ -681,7 +720,8 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#checkout-form").addEventListener("submit", handleFormSubmit);
 
   // Initial Load
+  loadState();
   renderProducts();
-  navigateTo("home");
+  navigateTo(state.currentPage || "home");
   updateUI();
 });

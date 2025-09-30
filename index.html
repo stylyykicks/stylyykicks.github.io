@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/jpeg" href="./images/logo1.png" />
-    <!-- SEO Meta Tags -->
     <meta
       name="description"
       content="Stylyy Kicks is Kerala's premier sneaker store. Provides affordable stylish shoes, fast delivery across Kerala. Shop the latest trends in sneakers!"
@@ -14,26 +13,18 @@
       content="sneakers, shoes, Kerala, affordable footwear, trendy sneakers, Stylyy Kicks, Wayanad, online shoe store, fashion, style"
     />
     <meta name="author" content="Stylyy Kicks" />
-    <link
-      rel="canonical"
-      href="https://stylyykicks.github.io/stylyy-kicks/"
-    />
-    <!-- Open Graph Meta Tags -->
+    <link rel="canonical" href="https://stylyykicks.github.io/" />
     <meta property="og:title" content="Stylyy Kicks — Walk in Style" />
     <meta
       property="og:description"
       content="Kerala's best sneaker deals, stylish shoes, fast delivery. Shop now!"
     />
     <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="https://stylyykicks.github.io/stylyy-kicks/"
-    />
+    <meta property="og:url" content="https://stylyykicks.github.io/" />
     <meta
       property="og:image"
-      content="https://stylyykicks.github.io/stylyy-kicks/images/logo.jpg"
+      content="https://stylyykicks.github.io/images/logo.jpg"
     />
-    <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Stylyy Kicks — Walk in Style" />
     <meta
@@ -42,9 +33,8 @@
     />
     <meta
       name="twitter:image"
-      content="https://stylyykicks.github.io/stylyy-kicks/images/logo.jpg"
+      content="https://stylyykicks.github.io/images/logo.jpg"
     />
-    <!-- Business Contact Meta Tags -->
     <meta
       name="business:contact_data:email"
       content="support@stylyykicks.example"
@@ -52,7 +42,7 @@
     <meta name="business:contact_data:region" content="Kerala, India" />
     <meta
       name="business:contact_data:website"
-      content="https://stylyykicks.github.io/stylyy-kicks/"
+      content="https://stylyykicks.github.io/"
     />
     <meta
       name="google-site-verification"
@@ -261,7 +251,9 @@
               <div
                 class="flex flex-col sm:flex-row items-center justify-between gap-4"
               >
-                <div class="flex gap-4 font-semibold text-slate-700">
+                <div
+                  class="flex flex-wrap items-center gap-x-4 gap-y-2 font-semibold text-slate-700"
+                >
                   <div>
                     1st Pair:
                     <span id="offer-sel1" class="text-blue-600">-</span>
@@ -269,6 +261,9 @@
                   <div>
                     2nd Pair:
                     <span id="offer-sel2" class="text-blue-600">-</span>
+                  </div>
+                  <div class="font-bold">
+                    Total: <span id="offer-total" class="text-blue-600">-</span>
                   </div>
                 </div>
                 <div class="flex gap-4">
@@ -336,8 +331,16 @@
             <div
               class="flex flex-col sm:flex-row items-center justify-between gap-4"
             >
-              <div class="font-semibold text-slate-700">
-                Selected: <span id="product-sel" class="text-blue-600">-</span>
+              <div
+                class="flex flex-wrap items-center gap-x-4 gap-y-2 font-semibold text-slate-700"
+              >
+                <div>
+                  Selected:
+                  <span id="product-sel" class="text-blue-600">-</span>
+                </div>
+                <div class="font-bold">
+                  Price: <span id="product-price" class="text-blue-600">-</span>
+                </div>
               </div>
               <div class="flex gap-4">
                 <button
@@ -451,5 +454,3 @@
     <div id="modal-container"></div>
   </body>
 </html>
-
-
