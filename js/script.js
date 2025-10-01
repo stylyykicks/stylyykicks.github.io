@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalContainer = $("#modal-container");
     const modal = document.createElement("div");
     modal.className =
-      "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50";
+      "fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50";
     modal.innerHTML = `
                 <div class="bg-white rounded-lg p-6 w-full max-w-sm text-center">
                     <h3 class="font-bold text-lg">${title}</h3>
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalContainer = $("#modal-container");
     const modal = document.createElement("div");
     modal.className =
-      "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50";
+      "fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50";
     modal.innerHTML = `
         <div class="bg-white rounded-lg p-6 w-full max-w-sm text-center relative">
             <button class="close-modal-btn absolute top-2 right-3 text-3xl text-slate-400 hover:text-slate-700">&times;</button>
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalContainer = $("#modal-container");
     const modal = document.createElement("div");
     modal.className =
-      "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50";
+      "fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50";
     modal.innerHTML = `
                 <div class="bg-white rounded-lg p-6 w-full max-w-sm">
                     <h3 class="font-bold text-lg">Please Confirm</h3>
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = document.createElement("div");
     const [item1, item2] = state.cart.items;
     modal.className =
-      "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50";
+      "fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50";
     modal.innerHTML = `
         <div class="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 class="font-bold text-lg">Replace an Item</h3>
@@ -226,32 +226,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (mode === "offer") {
       detailsHtml = `
-            <div class="flex items-center justify-between mt-2">
-                <div class="flex flex-wrap gap-2">
-                    ${product.sizes
-                      .map(
-                        (s) =>
-                          `<span class="text-xs border rounded-md px-2 py-1">${s}</span>`
-                      )
-                      .join("")}
+                <div class="flex items-center justify-between mt-2">
+                    <div class="flex flex-wrap gap-2">
+                        ${product.sizes
+                          .map(
+                            (s) =>
+                              `<span class="text-xs border rounded-md px-2 py-1">${s}</span>`
+                          )
+                          .join("")}
+                    </div>
+                    ${
+                      product.extra > 0
+                        ? `<span class="bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">+${formatINR(
+                            product.extra
+                          )}</span>`
+                        : ""
+                    }
                 </div>
-                ${
-                  product.extra > 0
-                    ? `<span class="bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">+${formatINR(
-                        product.extra
-                      )}</span>`
-                    : ""
-                }
-            </div>
-        `;
+            `;
     } else {
       detailsHtml = `
-            <div class="flex items-center justify-between mt-2">
-                <p class="font-semibold text-blue-600">${formatINR(
-                  product.price
-                )}</p>
-            </div>
-        `;
+                <div class="flex items-center justify-between mt-2">
+                    <p class="font-semibold text-blue-600">${formatINR(
+                      product.price
+                    )}</p>
+                </div>
+            `;
     }
 
     card.innerHTML = `
@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalContainer = $("#modal-container");
     const modal = document.createElement("div");
     modal.className =
-      "fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50";
+      "fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50";
     modal.innerHTML = `
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl m-4 transform transition-all opacity-0 -translate-y-4 max-h-[90vh] overflow-y-auto">
             <div class="p-6">
@@ -305,10 +305,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     <div>
                         <div class="flex justify-between items-start mb-4">
-                             <h2 class="text-2xl font-bold text-slate-800">${
-                               product.name
-                             }</h2>
-                             <button class="close-modal text-3xl text-slate-400 hover:text-slate-700">&times;</button>
+                              <h2 class="text-2xl font-bold text-slate-800">${
+                                product.name
+                              }</h2>
+                              <button class="close-modal text-3xl text-slate-400 hover:text-slate-700">&times;</button>
                         </div>
                         <p class="text-slate-600">Base Price: ${formatINR(
                           product.price
@@ -435,7 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalContainer = $("#modal-container");
     const modal = document.createElement("div");
     modal.className =
-      "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50";
+      "fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50";
     modal.innerHTML = `
                 <div class="bg-white rounded-lg p-6 w-full max-w-sm">
                     <h3 class="font-bold text-lg">Select Size for ${
@@ -566,18 +566,18 @@ document.addEventListener("DOMContentLoaded", () => {
       const itemEl = document.createElement("div");
       itemEl.className = "flex gap-4 items-center";
       itemEl.innerHTML = `
-                    <img src="${
-                      item.img
-                    }" class="w-20 h-20 object-cover rounded-md">
-                    <div>
-                        <p class="font-semibold">${item.name}</p>
-                        <p class="text-sm text-slate-500">Size: 
-                            <button data-item-index="${index}" class="size-select-btn text-blue-600 font-semibold underline">${
+                      <img src="${
+                        item.img
+                      }" class="w-20 h-20 object-cover rounded-md">
+                      <div>
+                          <p class="font-semibold">${item.name}</p>
+                          <p class="text-sm text-slate-500">Size: 
+                              <button data-item-index="${index}" class="size-select-btn text-blue-600 font-semibold underline">${
         item.selectedSize || "Select"
       }</button>
-                        </p>
-                    </div>
-                `;
+                          </p>
+                      </div>
+                  `;
       itemEl
         .querySelector(".size-select-btn")
         .addEventListener("click", () => selectSizeForCartItem(index));
